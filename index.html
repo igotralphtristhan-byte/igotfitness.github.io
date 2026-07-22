@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IGOT FITNESS | Sculpt Your Legacy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0a0a;
+    --ink-2:#141414;
+    --steel:#8a8f98;
+    --bone:#f2ede4;
+    --ember:#ff4d1f;
+    --ember-dim:#7a2711;
+    --line:rgba(242,237,228,0.12);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Barlow Condensed',sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Anton',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    line-height:0.92;
+  }
+  .eyebrow{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    color:var(--ember);
+    font-size:0.85rem;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  ::selection{background:var(--ember);color:var(--ink);}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:200;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 5vw;
+    background:linear-gradient(180deg, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0) 100%);
+    transition:background 0.3s ease, padding 0.3s ease;
+  }
+  header.scrolled{
+    background:rgba(10,10,10,0.92);
+    backdrop-filter:blur(6px);
+    padding:14px 5vw;
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'Anton',sans-serif;
+    font-size:1.5rem;
+    letter-spacing:0.03em;
+  }
+  .logo span{color:var(--ember);}
+  nav ul{
+    display:flex;
+    gap:2.6rem;
+    list-style:none;
+  }
+  nav a{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:1.05rem;
+    letter-spacing:0.15em;
+    position:relative;
+    padding-bottom:4px;
+  }
+  nav a::after{
+    content:'';
+    position:absolute;
+    left:0;bottom:0;
+    width:0;height:2px;
+    background:var(--ember);
+    transition:width 0.25s ease;
+  }
+  nav a:hover::after,nav a.active::after{width:100%;}
+  .nav-toggle{
+    display:none;
+    flex-direction:column;
+    gap:5px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    z-index:210;
+  }
+  .nav-toggle span{width:26px;height:2px;background:var(--bone);}
+
+  /* ---------- HERO / SLIDING BANNER ---------- */
+  .hero{
+    position:relative;
+    height:100vh;
+    min-height:640px;
+    display:flex;
+    align-items:flex-end;
+    overflow:hidden;
+  }
+  .slider{
+    position:absolute;
+    inset:0;
+    z-index:1;
+  }
+  .slide{
+    position:absolute;
+    inset:0;
+    background-size:cover;
+    background-position:center 20%;
+    opacity:0;
+    transform:scale(1.08);
+    transition:opacity 1.4s ease, transform 8s ease;
+  }
+  .slide.active{
+    opacity:1;
+    transform:scale(1);
+    z-index:2;
+  }
+  .hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.35) 30%, rgba(10,10,10,0.85) 100%),
+      linear-gradient(90deg, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.1) 45%, rgba(10,10,10,0.1) 60%, rgba(10,10,10,0.75) 100%);
+    z-index:3;
+  }
+  .slider-dots{
+    position:absolute;
+    bottom:36px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:5;
+    display:flex;
+    gap:12px;
+  }
+  .dot{
+    width:34px;height:3px;
+    background:rgba(242,237,228,0.3);
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+  }
+  .dot.active{background:rgba(242,237,228,0.3);}
+  .dot.active::after{
+    content:'';
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:100%;
+    background:var(--ember);
+    animation:fillDot 5s linear forwards;
+  }
+  @keyframes fillDot{from{width:0%;}to{width:100%;}}
+
+  .slider-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:5;
+    background:rgba(10,10,10,0.4);
+    border:1px solid var(--line);
+    color:var(--bone);
+    width:48px;height:48px;
+    border-radius:50%;
+    font-size:1.4rem;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.2s ease, border-color 0.2s ease;
+  }
+  .slider-arrow:hover{background:var(--ember);border-color:var(--ember);}
+  .slider-arrow.prev{left:5vw;}
+  .slider-arrow.next{right:5vw;}
+
+  .hero-content{
+    position:relative;
+    z-index:6;
+    padding:0 5vw 8vw;
+    width:100%;
+  }
+  .hero-content .eyebrow{margin-bottom:1rem;display:block;}
+  .hero-content h1{
+    font-size:clamp(3rem, 9vw, 8rem);
+    color:var(--bone);
+    text-shadow:0 8px 40px rgba(0,0,0,0.6);
+  }
+  .hero-content h1 em{
+    font-style:normal;
+    color:transparent;
+    -webkit-text-stroke:2px var(--ember);
+  }
+  .hero-sub{
+    margin-top:1.4rem;
+    max-width:560px;
+    font-size:1.25rem;
+    color:var(--steel);
+    font-weight:500;
+  }
+  .hero-cta{
+    margin-top:2.2rem;
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.14em;
+    font-size:1.05rem;
+    padding:16px 34px;
+    border:2px solid var(--ember);
+    background:var(--ember);
+    color:var(--ink);
+    cursor:pointer;
+    transition:all 0.25s ease;
+  }
+  .btn:hover{background:transparent;color:var(--bone);}
+  .btn.ghost{background:transparent;color:var(--bone);}
+  .btn.ghost:hover{background:var(--bone);color:var(--ink);border-color:var(--bone);}
+
+  .scroll-cue{
+    position:absolute;
+    right:5vw;bottom:36px;
+    z-index:6;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.3em;
+    font-size:0.75rem;
+    color:var(--steel);
+  }
+  .scroll-cue::after{
+    content:'';
+    width:1px;height:46px;
+    background:linear-gradient(var(--ember), transparent);
+    animation:cueMove 1.8s infinite ease-in-out;
+  }
+  @keyframes cueMove{
+    0%,100%{transform:translateY(0);opacity:1;}
+    50%{transform:translateY(8px);opacity:0.4;}
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:9vw 5vw;position:relative;}
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:3.5rem;
+    flex-wrap:wrap;
+    gap:1rem;
+    border-bottom:1px solid var(--line);
+    padding-bottom:1.6rem;
+  }
+  .section-head h2{font-size:clamp(2.2rem, 5vw, 4rem);}
+  .section-head p{max-width:420px;color:var(--steel);font-size:1.1rem;}
+
+  /* Training */
+  .paths{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .path-card{
+    background:var(--ink);
+    padding:2.6rem 2rem;
+    transition:background 0.3s ease;
+    position:relative;
+  }
+  .path-card:hover{background:var(--ink-2);}
+  .path-num{
+    font-family:'Bebas Neue',sans-serif;
+    color:var(--ember-dim);
+    font-size:1rem;
+    letter-spacing:0.2em;
+  }
+  .path-card h3{font-size:2rem;margin:1rem 0 0.8rem;}
+  .path-card p{color:var(--steel);font-size:1.05rem;line-height:1.5;margin-bottom:1.2rem;}
+  .path-card .tag{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.15em;
+    font-size:0.9rem;
+    color:var(--ember);
+    border-top:1px solid var(--line);
+    padding-top:1rem;
+    display:inline-block;
+  }
+
+  /* Nutrition */
+  .nutri-wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4rem;
+    align-items:center;
+  }
+  .nutri-visual{
+    aspect-ratio:4/5;
+    background-size:cover;
+    background-position:center;
+    position:relative;
+    filter:grayscale(0.3) contrast(1.05);
+    border:1px solid var(--line);
+  }
+  .nutri-visual::after{
+    content:'';
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 60%, rgba(10,10,10,0.9) 100%);
+  }
+  .macro-list{list-style:none;}
+  .macro-list li{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1.3rem 0;
+    border-bottom:1px solid var(--line);
+  }
+  .macro-list li span:first-child{font-size:1.4rem;font-family:'Bebas Neue',sans-serif;letter-spacing:0.05em;}
+  .macro-list li span:last-child{color:var(--ember);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;}
+
+  /* Stats */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .stat{
+    padding:3rem 1.5rem;
+    text-align:center;
+    border-right:1px solid var(--line);
+  }
+  .stat:last-child{border-right:none;}
+  .stat h3{font-size:clamp(2.4rem,5vw,3.6rem);color:var(--ember);}
+  .stat p{color:var(--steel);letter-spacing:0.1em;font-size:0.95rem;margin-top:0.4rem;font-family:'Bebas Neue',sans-serif;}
+
+  /* Contact */
+  .contact-wrap{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:4rem;
+  }
+  .field{margin-bottom:1.4rem;}
+  .field label{
+    display:block;
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.15em;
+    font-size:0.9rem;
+    color:var(--steel);
+    margin-bottom:0.5rem;
+  }
+  .field input,.field textarea{
+    width:100%;
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    padding:14px 16px;
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:1.05rem;
+    outline:none;
+    transition:border-color 0.2s ease;
+  }
+  .field input:focus,.field textarea:focus{border-color:var(--ember);}
+  .field textarea{resize:vertical;min-height:120px;}
+  .form-status{
+    margin-top:1rem;
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.1em;
+    color:var(--ember);
+    display:none;
+  }
+  .form-status.show{display:block;}
+
+  .contact-info{
+    border-left:1px solid var(--line);
+    padding-left:3rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .contact-info h3{font-size:1.8rem;margin-bottom:0.6rem;}
+  .info-block{margin-bottom:2rem;}
+  .info-block .eyebrow{margin-bottom:0.4rem;display:block;}
+  .info-block p{color:var(--bone);font-size:1.15rem;}
+  .socials{display:flex;gap:1rem;margin-top:1rem;}
+  .socials a{
+    border:1px solid var(--line);
+    padding:10px 18px;
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.1em;
+    font-size:0.9rem;
+    transition:all 0.2s ease;
+  }
+  .socials a:hover{background:var(--ember);border-color:var(--ember);color:var(--ink);}
+
+  @media (max-width:900px){
+    .contact-wrap{grid-template-columns:1fr;}
+    .contact-info{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:2rem;}
+    .nutri-wrap{grid-template-columns:1fr;}
+    .paths{grid-template-columns:1fr;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .stat{border-bottom:1px solid var(--line);}
+    nav ul{
+      position:fixed;
+      top:0;right:0;
+      height:100vh;
+      width:min(70vw,320px);
+      background:var(--ink-2);
+      flex-direction:column;
+      justify-content:center;
+      align-items:flex-start;
+      gap:2rem;
+      padding:0 3rem;
+      transform:translateX(100%);
+      transition:transform 0.35s ease;
+      z-index:205;
+      border-left:1px solid var(--line);
+    }
+    nav ul.open{transform:translateX(0);}
+    .nav-toggle{display:flex;}
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ink-2);
+    border-top:1px solid var(--line);
+    padding:4vw 5vw 2vw;
+  }
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr 1fr;
+    gap:2rem;
+    padding-bottom:3rem;
+    border-bottom:1px solid var(--line);
+  }
+  .footer-top h4{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.15em;
+    font-size:1rem;
+    color:var(--ember);
+    margin-bottom:1.1rem;
+  }
+  .footer-top ul{list-style:none;}
+  .footer-top ul li{margin-bottom:0.6rem;}
+  .footer-top ul li a{color:var(--steel);font-size:1.05rem;transition:color 0.2s ease;}
+  .footer-top ul li a:hover{color:var(--bone);}
+  .footer-brand .logo{margin-bottom:1rem;}
+  .footer-brand p{color:var(--steel);max-width:320px;line-height:1.5;}
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1.6rem 0;
+    flex-wrap:wrap;
+    gap:1rem;
+    font-size:0.95rem;
+    color:var(--steel);
+  }
+  .footer-bottom .credit{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.08em;
+    color:var(--bone);
+  }
+  .footer-bottom .credit span{color:var(--ember);}
+
+  @media (max-width:700px){
+    .footer-top{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <a href="#top" class="logo">IGOT <span>FITNESS</span></a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav>
+    <ul id="navList">
+      <li><a href="#top" class="active">Home</a></li>
+      <li><a href="#training">Training</a></li>
+      <li><a href="#nutrition">Nutrition</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero" id="top">
+  <!-- SLIDER BANNER IMAGES -->
+  <div class="slider" id="slider">
+    <div class="slide active" style="background-image:url('ga3.jpg')"></div>
+    <div class="slide" style="background-image:url('ga5.jpg')"></div>
+    <div class="slide" style="background-image:url('ga1.jpg')"></div>
+    <div class="slide" style="background-image:url('ga4.jpg')"></div>
+  </div>
+
+  <button class="slider-arrow prev" id="prevBtn" aria-label="Previous slide">&#10094;</button>
+  <button class="slider-arrow next" id="nextBtn" aria-label="Next slide">&#10095;</button>
+
+  <div class="hero-content">
+    <span class="eyebrow">Igot Fitness &mdash; Est. Discipline</span>
+    <h1>Sculpt Your <em>Legacy</em></h1>
+    <p class="hero-sub">Unleash your strength. Choose your path to elite fitness &mdash; built one rep, one plate, one decision at a time.</p>
+    <div class="hero-cta">
+      <button class="btn" onclick="document.getElementById('training').scrollIntoView({behavior:'smooth'})">Start Training</button>
+      <button class="btn ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Talk To A Coach</button>
+    </div>
+  </div>
+
+  <div class="slider-dots" id="sliderDots"></div>
+  <div class="scroll-cue">SCROLL</div>
+</section>
+
+<section id="training">
+  <div class="section-head">
+    <h2>Choose Your Path</h2>
+    <p>Three programs. One standard: relentless progress. Pick the track that matches where you are &mdash; not where you wish you were.</p>
+  </div>
+  <div class="paths">
+    <div class="path-card">
+      <span class="path-num">TRACK 01</span>
+      <h3>Foundation</h3>
+      <p>Build the base: movement quality, work capacity, and the habits that make every program after this one possible.</p>
+      <span class="tag">8 WEEKS &middot; 3x/WEEK</span>
+    </div>
+    <div class="path-card">
+      <span class="path-num">TRACK 02</span>
+      <h3>Hypertrophy</h3>
+      <p>Progressive overload, engineered volume, and recovery tracking built to add quality mass without wrecking your joints.</p>
+      <span class="tag">12 WEEKS &middot; 5x/WEEK</span>
+    </div>
+    <div class="path-card">
+      <span class="path-num">TRACK 03</span>
+      <h3>Peak Strength</h3>
+      <p>Low-rep, high-load blocks for lifters chasing a number &mdash; periodized toward a single test day.</p>
+      <span class="tag">10 WEEKS &middot; 4x/WEEK</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><h3>1,200+</h3><p>ATHLETES COACHED</p></div>
+    <div class="stat"><h3>14</h3><p>YEARS IN THE IRON</p></div>
+    <div class="stat"><h3>96%</h3><p>PROGRAM COMPLETION</p></div>
+    <div class="stat"><h3>24/7</h3><p>FACILITY ACCESS</p></div>
+  </div>
+</section>
+
+<section id="nutrition">
+  <div class="section-head">
+    <h2>Fuel The Legacy</h2>
+    <p>Training builds the demand. Nutrition is where the legacy actually gets built &mdash; simple targets, tracked honestly.</p>
+  </div>
+  <div class="nutri-wrap">
+    <div class="nutri-visual" style="background-image:url('ga3.jpg')"></div>
+    <div>
+      <ul class="macro-list">
+        <li><span>Protein</span><span>1.8&ndash;2.2g / kg</span></li>
+        <li><span>Carbohydrates</span><span>Cycled by load</span></li>
+        <li><span>Fats</span><span>0.8&ndash;1g / kg</span></li>
+        <li><span>Water</span><span>4&ndash;5L / day</span></li>
+        <li><span>Sleep</span><span>7&ndash;9 hrs / night</span></li>
+      </ul>
+      <p style="color:var(--steel);margin-top:1.6rem;line-height:1.6;font-size:1.1rem;">
+        Every plan is built around your training block, not a generic calculator. Macros shift as your volume shifts &mdash; because your body isn't a spreadsheet.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-head">
+    <h2>Start Your Legacy</h2>
+    <p>Tell us where you're starting. A coach will map your first block within 24 hours.</p>
+  </div>
+  <div class="contact-wrap">
+    <form id="contactForm">
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@email.com" required>
+      </div>
+      <div class="field">
+        <label for="goal">Primary Goal</label>
+        <input type="text" id="goal" name="goal" placeholder="Strength, hypertrophy, fat loss...">
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Tell us about your training background"></textarea>
+      </div>
+      <button type="submit" class="btn">Send Message</button>
+      <p class="form-status" id="formStatus">Message received. A coach will reach out shortly.</p>
+    </form>
+
+    <div class="contact-info">
+      <div>
+        <div class="info-block">
+          <span class="eyebrow">Location</span>
+          <p>Guiuan, Eastern Visayas, Philippines</p>
+        </div>
+        <div class="info-block">
+          <span class="eyebrow">Email</span>
+          <p>coach@igotfitness.com</p>
+        </div>
+        <div class="info-block">
+          <span class="eyebrow">Hours</span>
+          <p>Mon &ndash; Sat, 5AM &ndash; 10PM</p>
+        </div>
+      </div>
+      <div>
+        <h3>Follow The Grind</h3>
+        <div class="socials">
+          <a href="#">Instagram</a>
+          <a href="#">TikTok</a>
+          <a href="#">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#top" class="logo">IGOT <span>FITNESS</span></a>
+      <p>Sculpt your legacy. A training system built on discipline, honest programming, and results that hold up outside the gym.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#top">Home</a></li>
+        <li><a href="#training">Training</a></li>
+        <li><a href="#nutrition">Nutrition</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Programs</h4>
+      <ul>
+        <li><a href="#training">Foundation</a></li>
+        <li><a href="#training">Hypertrophy</a></li>
+        <li><a href="#training">Peak Strength</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#contact">coach@igotfitness.com</a></li>
+        <li><a href="#contact">Guiuan, Eastern Visayas, PH</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Igot Fitness. All rights reserved.</span>
+    <span class="credit">Designed &amp; Developed by <span>RALPH TRISTHAN B. IGOT</span></span>
+  </div>
+</footer>
+
+<script>
+  // Header background on scroll
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navList = document.getElementById('navList');
+  navToggle.addEventListener('click', () => navList.classList.toggle('open'));
+  navList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navList.classList.remove('open')));
+
+  // ---- Sliding Banner ----
+  const slides = document.querySelectorAll('.slide');
+  const dotsWrap = document.getElementById('sliderDots');
+  let current = 0;
+  let timer;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsWrap.appendChild(dot);
+  });
+  const dots = document.querySelectorAll('.dot');
+
+  function goToSlide(index){
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    resetTimer();
+  }
+
+  function nextSlide(){ goToSlide(current + 1); }
+  function prevSlide(){ goToSlide(current - 1); }
+
+  function resetTimer(){
+    clearInterval(timer);
+    timer = setInterval(nextSlide, 5000);
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+  resetTimer();
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let currentSection = 'top';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) currentSection = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + currentSection);
+    });
+  });
+
+  // Contact form (front-end only demo)
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    status.classList.add('show');
+    form.reset();
+    setTimeout(() => status.classList.remove('show'), 4000);
+  });
+</script>
+
+</body>
+</html>
